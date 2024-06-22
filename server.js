@@ -12,11 +12,10 @@ app.use(cors());
 app.use(bodyParser.json());
 
 const db = mysql.createConnection({
-    host: '127.0.0.1',
+    host: 'https://to-do-list-0n35.onrender.com',
     user: 'root',
     password: 'root',
     database: 'todo_list',
-    port: '3001'
 });
 
 db.connect(err => {
