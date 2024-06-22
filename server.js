@@ -14,7 +14,7 @@ app.use(bodyParser.json());
 const db = mysql.createConnection({
     host: 'localhost',
     user: 'root',
-    password: process.env.DB_PASS,
+    password: 'root',
     database: 'todo_list'
 });
 
