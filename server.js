@@ -5,16 +5,16 @@ const cors = require('cors');
 require('dotenv').config();
 
 const app = express();
-const port = process.env.PORT || 5000;
+const port = process.env.PORT || 3308;
 
 app.use(cors());
 
 app.use(bodyParser.json());
 
 const db = mysql.createConnection({
-    host: 'https://to-do-list-0n35.onrender.com',
+    host: '127.0.0.1',
     user: 'root',
-    password: 'root',
+    password: process.env.PASS,
     database: 'todo_list',
 });
 
@@ -59,6 +59,15 @@ app.delete('/api/todos/:id', (req, res) => {
         }
         res.status(200).send({ id });
     });
+});
+
+app.use((req, res, next) => {
+    res.status(404).send('Page Not Found');
+});
+
+app.use((err, req, res, next) => {
+    console.error(err.stack);
+    res.status(500).send('Something went wrong!');
 });
 
 app.listen(port, () => {
