@@ -6,24 +6,29 @@ const TodoList = () => {
     const [task, setTask] = useState('');
 
     useEffect(() => {
-        axios.get('https://to-do-list-0n35.onrender.com/api/todos')
+        // Replace 'http://localhost:8000/api/todos' with your API endpoint
+        axios.get('http://localhost:8000/api/todos')
             .then(response => setTodos(response.data))
             .catch(error => console.error('Error fetching todos:', error));
     }, []);
 
     const addTodo = () => {
+        if (!task.trim()) {
+            console.log('Task cannot be empty');
+            return;
+        }
         console.log('Adding task:', task); // Log task to be added
-        axios.post('https://to-do-list-0n35.onrender.com/api/todos', { task })
+        axios.post('http://localhost:8000/api/todos', { task })
             .then(response => {
                 console.log('Task added:', response.data); // Log success response
                 setTodos([...todos, response.data]);
+                setTask('');
             })
             .catch(error => console.error('Error adding todo:', error)); // Log error
-        setTask('');
     };
 
     const deleteTodo = (id) => {
-        axios.delete(`https://to-do-list-0n35.onrender.com/api/todos/${id}`)
+        axios.delete(`http://localhost:8000/api/todos/${id}`)
             .then(() => setTodos(todos.filter(todo => todo.id !== id)))
             .catch(error => console.error('Error deleting todo:', error));
     };
