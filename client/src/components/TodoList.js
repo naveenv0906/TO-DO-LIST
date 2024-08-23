@@ -6,8 +6,7 @@ const TodoList = () => {
     const [task, setTask] = useState('');
 
     useEffect(() => {
-        // Replace 'http://localhost:8000/api/todos' with your API endpoint
-        axios.get('http://localhost:8000/api/todos')
+        axios.get(`${process.env.REACT_APP_BACKEND_URL}/api/todos`)
             .then(response => setTodos(response.data))
             .catch(error => console.error('Error fetching todos:', error));
     }, []);
@@ -18,7 +17,7 @@ const TodoList = () => {
             return;
         }
         console.log('Adding task:', task); // Log task to be added
-        axios.post('http://localhost:8000/api/todos', { task })
+        axios.post(`${process.env.REACT_APP_BACKEND_URL}/api/todos`, { task })
             .then(response => {
                 console.log('Task added:', response.data); // Log success response
                 setTodos([...todos, response.data]);
@@ -28,7 +27,7 @@ const TodoList = () => {
     };
 
     const deleteTodo = (id) => {
-        axios.delete(`http://localhost:8000/api/todos/${id}`)
+        axios.delete(`${process.env.REACT_APP_BACKEND_URL}/api/todos/${id}`)
             .then(() => setTodos(todos.filter(todo => todo.id !== id)))
             .catch(error => console.error('Error deleting todo:', error));
     };
