@@ -1,5 +1,5 @@
 const express = require('express');
-const mysql = require('mysql2');
+const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 require('dotenv').config();
@@ -10,69 +10,65 @@ const port = process.env.PORT || 8000;
 app.use(cors());
 app.use(bodyParser.json());
 
-// Create a MySQL connection using environment variables
-const db = mysql.createConnection({
-    host: process.env.DB_HOST,
-    user: process.env.DB_USER,
-    password: process.env.DB_PASS,
-    database: process.env.DB_NAME,
+// Connect to MongoDB using environment variables
+mongoose.connect(`mongodb://${process.env.DB_HOST}/${process.env.DB_NAME}`)
+.then(() => {
+    console.log('Connected to the MongoDB database.');
+})
+.catch(err => {
+    console.error('Error connecting to the database:', err);
+    process.exit(1);
 });
 
-// Connect to the database and handle errors
-db.connect(err => {
-    if (err) {
-        console.error('Error connecting to the database:', err);
-        process.exit(1); 
-    }
-    console.log('Connected to the MySQL database.');
+// Define a Todo schema and model
+const todoSchema = new mongoose.Schema({
+    task: { type: String, required: true }
 });
+
+const Todo = mongoose.model('Todo', todoSchema);
 
 // Route to get all todos
-app.get('/api/todos', (req, res) => {
-    db.query('SELECT * FROM todos', (err, results) => {
-        if (err) {
-            console.error('Error fetching todos:', err);
-            res.status(500).send('Error fetching todos');
-            return;
-        }
-        res.json(results);
-    });
+app.get('/api/todos', async (req, res) => {
+    try {
+        const todos = await Todo.find();
+        res.json(todos);
+    } catch (err) {
+        console.error('Error fetching todos:', err);
+        res.status(500).send('Error fetching todos');
+    }
 });
 
 // Route to add a new todo
-app.post('/api/todos', (req, res) => {
+app.post('/api/todos', async (req, res) => {
     const { task } = req.body;
     if (!task) {
         res.status(400).send('Task is required');
         return;
     }
-    console.log('Received task:', task);
-    db.query('INSERT INTO todos (task) VALUES (?)', [task], (err, results) => {
-        if (err) {
-            console.error('Error inserting task:', err);
-            res.status(500).send('Error inserting task');
-            return;
-        }
-        console.log('Task inserted with ID:', results.insertId);
-        res.status(201).send({ id: results.insertId, task });
-    });
+    try {
+        const newTodo = new Todo({ task });
+        const savedTodo = await newTodo.save();
+        res.status(201).send({ id: savedTodo._id, task });
+    } catch (err) {
+        console.error('Error inserting task:', err);
+        res.status(500).send('Error inserting task');
+    }
 });
 
 // Route to delete a todo by id
-app.delete('/api/todos/:id', (req, res) => {
+app.delete('/api/todos/:id', async (req, res) => {
     const { id } = req.params;
     if (!id) {
         res.status(400).send('ID is required');
         return;
     }
-    db.query('DELETE FROM todos WHERE id = ?', [id], (err, results) => {
-        if (err) {
-            console.error('Error deleting task:', err);
-            res.status(500).send('Error deleting task');
-            return;
-        }
+    try {
+        await Todo.findByIdAndDelete(id);
         res.status(200).send({ id });
-    });
+    } catch (err) {
+        console.error('Error deleting task:', err);
+        res.status(500).send('Error deleting task');
+    }
 });
 
 // Middleware to handle 404 - Page Not Found
