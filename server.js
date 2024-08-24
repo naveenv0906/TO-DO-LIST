@@ -7,21 +7,18 @@ require('dotenv').config();
 const app = express();
 const port = process.env.PORT || 8000;
 
-// Middleware
 app.use(cors());
 app.use(bodyParser.json());
 
-// MongoDB URI
-const mongoURI = `mongodb://${process.env.DB_HOST}:${process.env.DB_PORT}/${process.env.DB_NAME}`;
-console.log('MongoDB URI:', mongoURI);
-
-// Connect to MongoDB
-mongoose.connect(mongoURI)
-.then(() => console.log('Connected to the MongoDB database.'))
-.catch(err => {
-    console.error('Error connecting to the database:', err);
-    process.exit(1);
-});
+// Connect to MongoDB using environment variables
+mongoose.connect(process.env.DB_URI)
+    .then(() => {
+        console.log('Connected to the MongoDB database.');
+    })
+    .catch(err => {
+        console.error('Error connecting to the database:', err);
+        process.exit(1);
+    });
 
 // Define a Todo schema and model
 const todoSchema = new mongoose.Schema({
@@ -30,7 +27,7 @@ const todoSchema = new mongoose.Schema({
 
 const Todo = mongoose.model('Todo', todoSchema);
 
-// Routes
+// Route to get all todos
 app.get('/api/todos', async (req, res) => {
     try {
         const todos = await Todo.find();
@@ -41,6 +38,7 @@ app.get('/api/todos', async (req, res) => {
     }
 });
 
+// Route to add a new todo
 app.post('/api/todos', async (req, res) => {
     const { task } = req.body;
     if (!task) {
@@ -57,6 +55,7 @@ app.post('/api/todos', async (req, res) => {
     }
 });
 
+// Route to delete a todo by id
 app.delete('/api/todos/:id', async (req, res) => {
     const { id } = req.params;
     if (!id) {
