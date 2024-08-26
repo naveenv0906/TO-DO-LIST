@@ -1,0 +1,42 @@
+/* TodoList.css */
+.container {
+    position: relative;
+  }
+  
+  .logout-btn {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    background-color: #f8d7da; /* Background color for the logout button */
+    border: 1px solid #f5c6cb; /* Border color */
+    color: #721c24; /* Text color */
+    font-size: 18px;
+    padding: 5px 10px;
+    border-radius: 5px;
+    cursor: pointer;
+    z-index: 1000; /* Ensure button is on top */
+  }
+  
+  /* Responsive styles for mobile devices */
+  @media (max-width: 768px) {
+    .logout-btn {
+      font-size: 16px;
+      padding: 4px 8px;
+      top: 5px; /* Adjust top spacing for smaller screens */
+      right: 5px; /* Adjust right spacing for smaller screens */
+    }
+  }
+  
+  @media (max-width: 576px) {
+    .logout-btn {
+      font-size: 14px;
+      padding: 3px 6px;
+      top: 2px; /* Adjust top spacing further for very small screens */
+      right: 2px; /* Adjust right spacing further for very small screens */
+    }
+  }
+  
+  .logout-btn:hover {
+    background-color: #f5c6cb; /* Hover effect for the button */
+  }
+  

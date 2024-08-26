@@ -1,0 +1,13 @@
+/* Logout.css */
+
+/* Add some margin for better spacing */
+.d-flex {
+    margin-top: 2rem;
+}
+
+/* Optional: Add a hover effect for the button */
+.btn-danger:hover {
+    background-color: #c82333;
+    border-color: #bd2130;
+    transition: background-color 0.3s, border-color 0.3s;
+}

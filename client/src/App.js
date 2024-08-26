@@ -1,11 +1,23 @@
 import React from 'react';
-import TodoList from './components/TodoList';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import '@fortawesome/fontawesome-free/css/all.min.css';
+import TodoList from './components/TodoList'; // Adjust the path based on your file structure
+import Register from './components/Register';
+import Login from './components/Login';
+import Logout from './components/Logout';
 
 function App() {
     return (
-        <div className="App">
-            <TodoList />
-        </div>
+        <Router>
+            <div className="App">
+                <Routes>
+                    <Route path="/" element={<Login />} />
+                    <Route path="/register" element={<Register />} />
+                    <Route path="/login" element={<Login />} />
+                    <Route path="/todos" element={<TodoList />} />
+                </Routes>
+            </div>
+        </Router>
     );
 }
 

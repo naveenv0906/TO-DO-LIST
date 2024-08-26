@@ -1,0 +1,30 @@
+/* Register.css */
+
+/* Animation for success and error messages */
+.alert {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+}
+
+/* Add some margin for better spacing */
+.container {
+    margin-top: 3rem;
+}
+
+.card {
+    border-radius: 0.5rem;
+}
+
+.card-shadow {
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Ensure the register box maintains a 4:3 aspect ratio */
+.card {
+    height: calc(75% + 2rem);
+    width: calc(100% + 2rem);
+}
