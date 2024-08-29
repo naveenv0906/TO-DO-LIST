@@ -10,10 +10,10 @@ const Todo = require('./models/Todo');
 const app = express();
 const port = process.env.PORT || 8000;
 
-// Middleware setup
+// Middleware
 app.use(cors());
-app.use(bodyParser.json()); // For parsing application/json
-app.use(express.urlencoded({ extended: true })); // For parsing application/x-www-form-urlencoded
+app.use(bodyParser.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Connect to MongoDB using environment variables
 mongoose.connect(process.env.DB_URI)
@@ -23,7 +23,6 @@ mongoose.connect(process.env.DB_URI)
         process.exit(1);
     });
 
-// Route to get all todos for the authenticated user
 app.get('/api/todos', authenticate, async (req, res) => {
     try {
         const todos = await Todo.find({ user: req.user._id });
@@ -34,7 +33,6 @@ app.get('/api/todos', authenticate, async (req, res) => {
     }
 });
 
-// Route to add a new todo for the authenticated user
 app.post('/api/todos', authenticate, async (req, res) => {
     const { task } = req.body;
     if (!task) {
@@ -43,7 +41,7 @@ app.post('/api/todos', authenticate, async (req, res) => {
     try {
         const newTodo = new Todo({
             task,
-            user: req.user._id // Associate the todo with the authenticated user
+            user: req.user._id
         });
         const savedTodo = await newTodo.save();
         res.status(201).send({ id: savedTodo._id, task });
@@ -53,7 +51,6 @@ app.post('/api/todos', authenticate, async (req, res) => {
     }
 });
 
-// Route to delete a todo for the authenticated user
 app.delete('/api/todos/:id', authenticate, async (req, res) => {
     const { id } = req.params;
 
@@ -73,24 +70,19 @@ app.delete('/api/todos/:id', authenticate, async (req, res) => {
     }
 });
 
-// User registration route
 app.post('/api/register', register);
 
-// User login route
 app.post('/api/login', login);
 
-// Middleware to handle 404 - Page Not Found
 app.use((req, res, next) => {
     res.status(404).send('Page Not Found');
 });
 
-// Error handling middleware
 app.use((err, req, res, next) => {
     console.error('Error occurred:', err.stack);
     res.status(500).send('Something went wrong!');
 });
 
-// Start the server
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
 });

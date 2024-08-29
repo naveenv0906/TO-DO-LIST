@@ -3,8 +3,8 @@ import axios from 'axios';
 import { useNavigate } from 'react-router-dom';
 import Register from './Register';
 import Login from './Login';
-import { getToken, logout } from '../services/AuthService'; // Ensure correct imports
-import './TodoList.css'; // Import the CSS file
+import { getToken, logout } from '../services/AuthService'; 
+import './TodoList.css';
 
 const TodoList = () => {
   const [todos, setTodos] = useState([]);
@@ -19,14 +19,12 @@ const TodoList = () => {
       // Redirect to login if no token
       navigate('/login');
     } else {
-      // Fetch todos if logged in
       axios.get(`${backendUrl}/api/todos`, {
         headers: {
           Authorization: `Bearer ${token}`
         }
       })
         .then(response => {
-          console.log('Todos fetched:', response.data); // Log fetched todos
           setTodos(response.data);
         })
         .catch(error => {
@@ -76,7 +74,7 @@ const TodoList = () => {
   };
 
   const handleLogout = () => {
-    logout(); // Use logout to clear token from session storage
+    logout();
     setIsLoggedIn(false);
     navigate('/login');
   };

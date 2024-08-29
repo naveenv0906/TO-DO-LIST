@@ -1,8 +1,7 @@
-// src/components/Logout.js
 import React from 'react';
 import { logout } from '../services/AuthService';
-import 'bootstrap/dist/css/bootstrap.min.css'; // Import Bootstrap CSS
-import './Logout.css'; // Custom CSS for animations
+import 'bootstrap/dist/css/bootstrap.min.css'; 
+import './Logout.css'; 
 
 const Logout = ({ onLogout }) => {
   const handleLogout = () => {

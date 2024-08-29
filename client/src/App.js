@@ -1,7 +1,7 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import '@fortawesome/fontawesome-free/css/all.min.css';
-import TodoList from './components/TodoList'; // Adjust the path based on your file structure
+import TodoList from './components/TodoList'; 
 import Register from './components/Register';
 import Login from './components/Login';
 import Logout from './components/Logout';

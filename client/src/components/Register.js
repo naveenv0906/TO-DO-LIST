@@ -4,13 +4,13 @@ import { useNavigate, Link } from 'react-router-dom';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './Register.css';
 import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
-import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'; // Import eye icons
+import { faEye, faEyeSlash } from '@fortawesome/free-solid-svg-icons'; 
 
 const Register = () => {
   const backendUrl = process.env.REACT_APP_BACKEND_URL || 'http://localhost:8000';
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
-  const [showPassword, setShowPassword] = useState(false); // State to toggle password visibility
+  const [showPassword, setShowPassword] = useState(false); 
   const [error, setError] = useState(null);
   const [success, setSuccess] = useState(null);
   const navigate = useNavigate();
@@ -24,7 +24,6 @@ const Register = () => {
       setError(null);
       navigate('/login');
     } catch (err) {
-      // Check for specific error message from the backend
       if (err.response && err.response.data) {
         if (err.response.data.includes('User already exists')) {
           setError('User already exists. Please use a different email.');
