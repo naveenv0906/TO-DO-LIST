@@ -24,7 +24,11 @@ const Login = () => {
       setTimeout(() => navigate('/todos'), 1500);
     } catch (error) {
       console.error('Error logging in:', error);
-      setError('Error logging in');
+      if (error.response && error.response.data && error.response.data.error) {
+        setError(error.response.data.error);
+      } else {
+        setError('An unexpected error occurred. Please try again later.');
+      }
     }
   };
 
@@ -36,6 +40,7 @@ const Login = () => {
             <h2 className="text-center mb-4">Login</h2>
             <form onSubmit={handleSubmit}>
               <div className="form-group">
+                {/* Email input */}
                 <input
                   type="email"
                   className="form-control mb-3"
@@ -43,7 +48,10 @@ const Login = () => {
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
                   required
+                  name="email_field"
+                  autoComplete="off" // Prevents autofill from browser
                 />
+                {/* Password input with show/hide functionality */}
                 <div className="input-group mb-3">
                   <input
                     type={showPassword ? 'text' : 'password'}
@@ -52,6 +60,8 @@ const Login = () => {
                     value={password}
                     onChange={(e) => setPassword(e.target.value)}
                     required
+                    name="password_field"
+                    autoComplete="new-password" // Prevents password autofill
                   />
                   <div className="input-group-append">
                     <button
@@ -63,10 +73,15 @@ const Login = () => {
                     </button>
                   </div>
                 </div>
+                {/* Submit button */}
                 <button type="submit" className="btn btn-primary w-100">Login</button>
               </div>
+
+              {/* Success or Error Messages */}
               {success && <div className="alert alert-success mt-3">{success}</div>}
               {error && <div className="alert alert-danger mt-3">{error}</div>}
+
+              {/* Registration link */}
               <p className="mt-3 text-center">
                 Don't have an account? <Link to="/register">Create one here</Link>
               </p>

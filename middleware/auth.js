@@ -36,21 +36,21 @@ exports.login = async (req, res) => {
 
     if (!email || !password) {
         console.log('Error: Email or password is missing.');
-        return res.status(400).send('Email and password are required');
+        return res.status(400).send({ error: 'Email and password are required' });
     }
 
     try {
         const user = await User.findOne({ email });
         if (!user) {
             console.log('Error: User not found:', { email });
-            return res.status(400).send('Invalid email or password');
+            return res.status(400).send({ error: 'Invalid email or password' });
         }
 
         const isMatch = await bcrypt.compare(password, user.password);
 
         if (!isMatch) {
             console.log('Error: Passwords do not match for:', { email });
-            return res.status(400).send('Invalid email or password');
+            return res.status(400).send({ error: 'Invalid email or password' });
         }
 
         // Generate a JWT token
@@ -58,9 +58,10 @@ exports.login = async (req, res) => {
         res.status(200).send({ token, email: user.email });
     } catch (err) {
         console.error('Error logging in user:', err.message);
-        res.status(500).send('Error logging in user: ' + err.message);
+        res.status(500).send({ error: 'Error logging in user: ' + err.message });
     }
 };
+
 
 exports.authenticate = async (req, res, next) => {
     const authHeader = req.header('Authorization');
